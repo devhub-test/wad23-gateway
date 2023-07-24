@@ -1,0 +1,68 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: wad23-poi-gateway-app-dev
+  annotations:
+    argocd/app-name: wad23-poi-gateway-app-dev
+    backstage.io/kubernetes-id: wad23-poi-gateway-app
+    backstage.io/kubernetes-namespace: wad23
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: devhub-test/wad23-gateway
+    janus-idp.io/tekton-enabled: 'true'
+  tags:
+    - java
+    - quarkus
+    - maven
+    - workshop
+  links:
+    - url: https://console-openshift-console.apps.redhatdevhub.l07n.p1.openshiftapps.com/dev-pipelines/ns/wad23/
+      title: Pipelines
+      icon: web
+    - url: https://console-openshift-console.apps.redhatdevhub.l07n.p1.openshiftapps.com/k8s/ns/wad23/deployments/wad23-poi-gateway-app
+      title: Deployment
+      icon: web
+    - url: https://devspaces.apps.redhatdevhub.l07n.p1.openshiftapps.com/#https://github.com/devhub-test/wad23-gateway?che-editor=che-incubator/che-code/latest&devfilePath=.devfile-vscode.yaml
+      title: OpenShift Dev Spaces (VS Code)
+      icon: web
+spec:
+  type: service
+  lifecycle: production
+  owner: "user:default/hpgrahsl"
+  system: workshop-system-wad23
+  providesApis:
+    - gateway-api-wad23
+  consumesApis:
+    - backend-api-wad23
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: workshop-system-wad23
+  tags:
+    - backstage
+    - janus-idp
+    - openshift
+    - workshop
+    - rh-summit
+spec:
+  owner: "user:default/hpgrahsl"
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: gateway-api-wad23
+  description: API surface exposed to interact with Backends (summit POIs + parks data) via the Gateway
+  links:
+    - url: http://wad23-poi-gateway-app-wad23.apps.redhatdevhub.l07n.p1.openshiftapps.com/q/swagger-ui
+      title: Swagger UI
+      icon: web
+    - url: https://github.com/devhub-test/wad23-gateway/tree/main/src/main/resources/META-INF/openapi.yaml
+      title: API Spec
+      icon: code
+spec:
+  type: openapi
+  lifecycle: production
+  owner: "user:default/hpgrahsl"
+  system: workshop-system-wad23
+  definition:
+    $text: https://github.com/devhub-test/wad23-gateway/tree/main/src/main/resources/META-INF/openapi.yaml
